@@ -14,3 +14,5 @@ https://uxfresh.com
 
 <pre>wget http://bit.ly/1M2ySsd &amp;&amp; apt-get install dos2unix &amp;&amp; dos2unix wp.sh &amp;&amp; chmod +x wp.sh &amp;&amp; ./wp.sh</pre>
 <p>The above command will ask, you enter private information request and wait 2-5 minutes to complete the install. Good luck.!.</p>
+<h1>Documentation</h1>
+https://uxfresh.com/docs
