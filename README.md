@@ -1,12 +1,12 @@
 <h1>Websites</h1>
 https://uxfresh.com
 <h1>Prerequisite</h1>
-<h2>VPS Hosting (Like Cloud VPS)</h2>
+<h4>VPS Hosting (Like Cloud VPS)</h4>
 <p> - Ubuntu 14.04</p>
 <p> - root User</p>
-<h2>Changing your domains DNS Settings</h2>
-<h2>DuoSecurity.com (Two-Factor Authentication)<h2>
-<h4>Creat UNIX Integration get:</h4>
+<h4>Changing your domains DNS Settings</h4>
+<h4>DuoSecurity.com (Two-Factor Authentication)<h4>
+<h6>Creat UNIX Integration get:</h6>
 <p>- Integration key</p>
 <p>- Secret key</p>
 <p>- API hostname</p>
