@@ -5,7 +5,8 @@ https://uxfresh.com
 <p> - Ubuntu 14.04</p>
 <p> - root User</p>
 <h2>Changing your domains DNS Settings</h2>
-<h2>DuoSecurity.com (Two-Factor Authentication) -> Creat UNIX Integration get:<h2>
+<h2>DuoSecurity.com (Two-Factor Authentication)<h2>
+<h4>Creat UNIX Integration get:</h4>
 <p>- Integration key</p>
 <p>- Secret key</p>
 <p>- API hostname</p>
