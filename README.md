@@ -1,15 +1,5 @@
-<div class="pre-video">
-                    <h1><i class="fa fa-dot-circle-o"></i>
- Prerequisite</h1>
-                    <div class="video-doc">
-                        <a href="/contact.html"><i class="fa fa-play-circle"></i>
- View Video</a>
-                        <a href="#"><i class="fa fa-link"></i>
- Full Documentation</a>
-                    </div>
-                </div>
-                <p><i class="fa fa-check-square"></i>
- VPS Hosting (Like Cloud VPS)</p>
+<h1>Prerequisite</h1>
+VPS Hosting (Like Cloud VPS)
                     <small><i class="fa fa-linux"></i>
  Ubuntu 14.04</small>
                     <small><i class="fa fa-user-secret"></i>
