@@ -67,8 +67,7 @@ read -p "Enter your APIhostname [e.g. api-8d563xxx.duosecurity.com]: " APIhostna
 
 clear
 #Link plugin
-plugin="http://bit.ly/1E9gpEt"
-
+plugin="https://www.dropbox.com/s/hxbpgwd16l5s375/plugin.zip"
 #Update Ubuntu 14.04
 sudo apt-get update
 
@@ -93,7 +92,7 @@ sed -i "s/^;listen.group = www-data/listen.group = www-data/" /etc/php5/fpm/pool
 sed -i "s/^;listen.mode = 0660/listen.mode = 0660/" /etc/php5/fpm/pool.d/www.conf
 
 #File no_cache.conf - FastCGI
-wget -O /etc/nginx/no_cache.conf http://bit.ly/1zW8nyg
+wget -O /etc/nginx/no_cache.conf https://raw.githubusercontent.com/UXfresh/UXfresh-shell-script/master/no_cache.conf
 
 #Creat folder seve Cache, Configuration Nginx & FastCGI
 mkdir /usr/share/nginx/cache
