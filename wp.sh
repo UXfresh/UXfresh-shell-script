@@ -68,6 +68,7 @@ read -p "Enter your APIhostname [e.g. api-8d563xxx.duosecurity.com]: " APIhostna
 clear
 #Link plugin
 plugin="https://www.dropbox.com/s/hxbpgwd16l5s375/plugin.zip"
+
 #Update Ubuntu 14.04
 sudo apt-get update
 
@@ -170,11 +171,13 @@ sed -i "/#@+/,/#@-/d" wp-config.php
 rm -rf wordpress
 rm -rf latest.tar.gz
 rm -rf /tmp/wp.keys
+chown -R www-data:www-data *
 #Install Plugin
 cd /usr/share/nginx/html/wp-content/plugins
 wget $plugin
 unzip plugin.zip
 rm -rf plugin.zip
+chown -R www-data:www-data *
 cd
 
 #Change max upload to 50MB
