@@ -29,6 +29,30 @@ if [ "$servername" != "" ] && [ "$serverIP" != "" ] && [ "$url" != "" ]; then
 	break
 fi
 done
+
+while [ 1 ];do
+clear
+echo "============================================"
+echo " || Configuration Max size memory FastCGI cache [e.g. 1024]"
+echo " || *************************************"
+echo " || * | Note: Like Max_size = RAM system on VPS |*"
+echo " || *************************************"
+echo "============================================"
+read -p "Enter your Max size memory FastCGI cache [e.g. 1024]: " maxcache
+if [ "$maxcache" != "" ]; then
+	break
+fi
+done
+
+clear
+echo "============================================"
+echo " || Configuration your Email notifications IP banned by Fail2ban"
+echo " || **************************************************************"
+echo " || * | Note: Leave it empty if you don't want to notifications |*"
+echo " || **************************************************************"
+echo "============================================"
+read -p "Enter your email [e.g. mail@gmail.com]: " MAIL
+
 clear
 echo "============================================"
 echo " || Two-Factor Authentication for SSH by DuoSecurity.com"
@@ -42,21 +66,15 @@ read -p "Enter your Secretkey [e.g. DBRaVog9rG2pWqk1r9JEMExxx]: " Secretkey
 read -p "Enter your APIhostname [e.g. api-8d563xxx.duosecurity.com]: " APIhostname
 
 clear
-echo "============================================"
-echo " || Configuration your Email notifications IP banned by Fail2ban"
-echo " || **************************************************************"
-echo " || * | Note: Leave it empty if you don't want to notifications |*"
-echo " || **************************************************************"
-echo "============================================"
-read -p "Enter your email [e.g. mail@gmail.com]: " MAIL
-
 #Link plugin
-plugin="https://www.dropbox.com/s/hxbpgwd16l5s375/plugin.zip"
-#Update Ubuntu 14.04 x 64bit
+plugin="http://bit.ly/1E9gpEt"
+
+#Update Ubuntu 14.04
 sudo apt-get update
 
 #Install Unzip
 sudo apt-get -y install unzip
+
 #Install Nginx
 sudo apt-get -y install nginx
 
@@ -74,13 +92,16 @@ sed -i "s/^;listen.owner = www-data/listen.owner = www-data/" /etc/php5/fpm/pool
 sed -i "s/^;listen.group = www-data/listen.group = www-data/" /etc/php5/fpm/pool.d/www.conf
 sed -i "s/^;listen.mode = 0660/listen.mode = 0660/" /etc/php5/fpm/pool.d/www.conf
 
+#File no_cache.conf - FastCGI
+wget -O /etc/nginx/no_cache.conf http://bit.ly/1zW8nyg
+
 #Creat folder seve Cache, Configuration Nginx & FastCGI
 mkdir /usr/share/nginx/cache
 sed -i "s/^\tworker_connections 768;/\tworker_connections 1536;/" /etc/nginx/nginx.conf
-sed -i "s/^\t#passenger_ruby \/usr\/bin\/ruby;/\t#passenger_ruby \/usr\/bin\/ruby;\n\n\tfastcgi_cache_path \/usr\/share\/nginx\/cache\/fcgi levels=1:2 keys_zone=microcache:10m max_size=512m inactive=1h;/" /etc/nginx/nginx.conf
+sed -i "s/^\t#passenger_ruby \/usr\/bin\/ruby;/\t#passenger_ruby \/usr\/bin\/ruby;\n\n\tfastcgi_cache_path \/usr\/share\/nginx\/cache\/fcgi levels=1:2 keys_zone=wordpress:10m max_size=${maxcache}m inactive=1h;/" /etc/nginx/nginx.conf
 sed -i "s/^\tindex index.html index.htm;/\tindex index.php index.html index.htm;/" /etc/nginx/sites-available/default
-sed -i "s/^\tserver_name localhost;/\tserver_name $servername;/" /etc/nginx/sites-available/default
-sed -i "s/^\tlocation \/ {/\n\tlocation ~ \\\.php$ {\n\t\ttry_files \$uri =404;\n\t\tfastcgi_split_path_info ^(.+\\\.php)(\/.+)\$;\n\t\tfastcgi_cache  microcache;\n\t\tfastcgi_cache_key \$scheme\$host\$request_uri\$request_method;\n\t\tfastcgi_cache_valid 200 301 302 30s;\n\t\tfastcgi_cache_use_stale updating error timeout invalid_header http_500;\n\t\tfastcgi_pass_header Set-Cookie;\n\t\tfastcgi_pass_header Cookie;\n\t\tfastcgi_ignore_headers Cache-Control Expires Set-Cookie;\n\t\tfastcgi_pass unix:\/var\/run\/php5-fpm.sock;\n\t\tfastcgi_index index.php;\n\t\tinclude fastcgi_params;\n\t}\n\tlocation \/ {/" /etc/nginx/sites-available/default
+sed -i "s/^\tserver_name localhost;/\tserver_name $servername;\n\n\tinclude \/etc\/nginx\/no_cache.conf;/" /etc/nginx/sites-available/default
+sed -i "s/^\tlocation \/ {/\n\tlocation ~ \\\.php$ {\n\t\ttry_files \$uri =404;\n\t\tfastcgi_split_path_info ^(.+\\\.php)(\/.+)\$;\n\t\tfastcgi_cache  wordpress;\n\t\tfastcgi_cache_key \$scheme\$host\$request_uri\$request_method;\n\t\tfastcgi_cache_valid 200 301 302 30s;\n\t\tfastcgi_cache_use_stale updating error timeout invalid_header http_500;\n\t\tfastcgi_pass_header Set-Cookie;\n\t\tfastcgi_pass_header Cookie;\n\t\tfastcgi_ignore_headers Cache-Control Expires Set-Cookie;\n\t\tfastcgi_pass unix:\/var\/run\/php5-fpm.sock;\n\t\tfastcgi_index index.php;\n\t\tfastcgi_cache_bypass \$skip_cache;\n\t\tfastcgi_no_cache \$skip_cache;\n\t\tinclude fastcgi_params;\n\t}\n\tlocation \/ {/" /etc/nginx/sites-available/default
 sed -i "s/^\t\t# First attempt to serve request as file, then/\t\t# First attempt to serve request as file, then\n\t\ttry_files \$uri \$uri\/ \/index.php?\$args;/" /etc/nginx/sites-available/default
 sed -i "s/^\t\ttry_files \$uri \$uri\/ =404;/\t\t#try_files \$uri \$uri\/ =404;/" /etc/nginx/sites-available/default
 
@@ -150,7 +171,6 @@ sed -i "/#@+/,/#@-/d" wp-config.php
 rm -rf wordpress
 rm -rf latest.tar.gz
 rm -rf /tmp/wp.keys
-
 #Install Plugin
 cd /usr/share/nginx/html/wp-content/plugins
 wget $plugin
@@ -166,7 +186,6 @@ sed -i "s/^upload_max_filesize = 2M/upload_max_filesize = 50M/" /etc/php5/fpm/ph
 service nginx restart
 service mysql restart
 service php5-fpm restart
-
 
 #Nginx Rewrite redirect IP to Domain
 sed -i "s/^\# statements for each of your virtual hosts to this file/\# statements for each of your virtual hosts to this file\n\server {\n\tlisten 80;\n\tserver_name $servername;\n\treturn 301 \$scheme:\/\/$url\$request_uri;\n\}/" /etc/nginx/sites-available/default
