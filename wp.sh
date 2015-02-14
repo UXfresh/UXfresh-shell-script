@@ -190,9 +190,11 @@ service mysql restart
 service php5-fpm restart
 
 #Nginx Rewrite redirect IP to Domain
-sed -i "s/^\# statements for each of your virtual hosts to this file/\# statements for each of your virtual hosts to this file\n\server {\n\tlisten 80;\n\tserver_name $servername;\n\treturn 301 \$scheme:\/\/$url\$request_uri;\n\}/" /etc/nginx/sites-available/default
-sed -i "s/^\# statements for each of your virtual hosts to this file/\# statements for each of your virtual hosts to this file\n\server {\n\tlisten 80;\n\tserver_name $serverIP;\n\treturn 301 \$scheme:\/\/$url\$request_uri;\n\}/" /etc/nginx/sites-available/default
+if [ "$servername" != "$url" ]; then
+    sed -i "s/^\# statements for each of your virtual hosts to this file/\# statements for each of your virtual hosts to this file\n\server {\n\tlisten 80;\n\tserver_name $servername;\n\treturn 301 \$scheme:\/\/$url\$request_uri;\n\}/" /etc/nginx/sites-available/default
+fi
 
+sed -i "s/^\# statements for each of your virtual hosts to this file/\# statements for each of your virtual hosts to this file\n\server {\n\tlisten 80;\n\tserver_name $serverIP;\n\treturn 301 \$scheme:\/\/$url\$request_uri;\n\}/" /etc/nginx/sites-available/default
 service nginx restart
 
 #Remove file
