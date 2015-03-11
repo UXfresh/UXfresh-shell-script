@@ -76,12 +76,19 @@ sudo apt-get update
 sudo apt-get -y install unzip
 
 #Install Nginx
-sudo apt-get -y install nginx
+add-apt-repository -y ppa:nginx/stable
+apt-get update
+apt-get install -y nginx
 
 #Install MySQL
-echo mysql-server mysql-server/root_password password $msqlpassroot | sudo debconf-set-selections
-echo mysql-server mysql-server/root_password_again password $msqlpassroot | sudo debconf-set-selections
-sudo apt-get -y install mysql-server mysql-client
+apt-get install -y software-properties-common
+apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
+add-apt-repository 'deb http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.0/ubuntu trusty main'
+apt-get update
+echo mysql-server mysql-server/root_password password $msqlpassroot | debconf-set-selections
+echo mysql-server mysql-server/root_password_again password $msqlpassroot | debconf-set-selections
+apt-get install -y mariadb-server
+
 
 #Install PHP-FPM & Extentions
 sudo apt-get install -y php5-mysql php5-fpm php5-gd php5-cli php5-curl
