@@ -105,7 +105,7 @@ wget -O /etc/nginx/no_cache.conf https://raw.githubusercontent.com/UXfresh/UXfre
 #Creat folder seve Cache, Configuration Nginx & FastCGI
 mkdir /usr/share/nginx/cache
 sed -i "s/^\tworker_connections 768;/\tworker_connections 1536;/" /etc/nginx/nginx.conf
-sed -i "s/^\t#passenger_ruby \/usr\/bin\/ruby;/\t#passenger_ruby \/usr\/bin\/ruby;\n\n\tfastcgi_cache_path \/usr\/share\/nginx\/cache\/fcgi levels=1:2 keys_zone=wordpress:10m max_size=${maxcache}m inactive=1h;/" /etc/nginx/nginx.conf
+sed -i "s/^\tdefault_type application\/octet-stream;/\tdefault_type application\/octet-stream;\n\n\tfastcgi_cache_path \/usr\/share\/nginx\/cache\/fcgi levels=1:2 keys_zone=wordpress:10m max_size=${maxcache}m inactive=1h;/" /etc/nginx/nginx.conf
 sed -i "s/^\tindex index.html index.htm;/\tindex index.php index.html index.htm;/" /etc/nginx/sites-available/default
 sed -i "s/^\tserver_name localhost;/\tserver_name $servername;\n\n\tinclude \/etc\/nginx\/no_cache.conf;/" /etc/nginx/sites-available/default
 sed -i "s/^\tlocation \/ {/\n\tlocation ~ \\\.php$ {\n\t\ttry_files \$uri =404;\n\t\tfastcgi_split_path_info ^(.+\\\.php)(\/.+)\$;\n\t\tfastcgi_cache  wordpress;\n\t\tfastcgi_cache_key \$scheme\$host\$request_uri\$request_method;\n\t\tfastcgi_cache_valid 200 301 302 30s;\n\t\tfastcgi_cache_use_stale updating error timeout invalid_header http_500;\n\t\tfastcgi_pass_header Set-Cookie;\n\t\tfastcgi_pass_header Cookie;\n\t\tfastcgi_ignore_headers Cache-Control Expires Set-Cookie;\n\t\tfastcgi_pass unix:\/var\/run\/php5-fpm.sock;\n\t\tfastcgi_index index.php;\n\t\tfastcgi_cache_bypass \$skip_cache;\n\t\tfastcgi_no_cache \$skip_cache;\n\t\tinclude fastcgi_params;\n\t}\n\tlocation \/ {/" /etc/nginx/sites-available/default
