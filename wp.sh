@@ -159,14 +159,13 @@ fi
 
 #Create CSDL website
 mysql -uroot -p$msqlpassroot -e "create database $mysqldb;"
-mysql -uroot -p$msqlpassroot -e "create database $mysqldb;"
 mysql -uroot -p$msqlpassroot -e "create user $mysqluser@localhost;"
 mysql -uroot -p$msqlpassroot -e "SET PASSWORD FOR $mysqluser@localhost= PASSWORD('$mysqluserpass');"
 mysql -uroot -p$msqlpassroot -e "GRANT ALL PRIVILEGES ON $mysqldb.* TO ${mysqluser}@localhost IDENTIFIED BY '$mysqluserpass';"
 mysql -uroot -p$msqlpassroot -e "FLUSH PRIVILEGES;"
 
 #Install Wordpress
-cd /usr/share/nginx/html
+cd /var/www/html
 wget http://wordpress.org/latest.tar.gz
 tar -xvzf latest.tar.gz
 mv wordpress/* ./
