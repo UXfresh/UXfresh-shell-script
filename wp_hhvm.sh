@@ -25,7 +25,11 @@ sudo apt-get install -y ufw
 sudo ufw allow ssh
 sudo ufw allow http
 sudo ufw allow https
-sudo ufw enable
+if systemctl is-active ufw > /dev/null; then
+    notify-send "ufw active"
+else
+    notify-send "ufw inactive"
+fi
 
 #
 #  ========================
@@ -148,7 +152,7 @@ sed -i "s/^\# Default server configuration/\# Default server configuration\n\ser
 
 sudo apt-get install -y redis-server
 sudo apt-get install -y php5-redis
-sed -i "s/^# maxmemory/maxmemory 64mb/" /etc/redis/redis.conf
+sed -i "s/^# maxmemory <bytes>/maxmemory 64mb/" /etc/redis/redis.conf
 sudo service redis-server restart
 
 
