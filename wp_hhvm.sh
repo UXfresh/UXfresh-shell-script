@@ -89,37 +89,37 @@ sudo apt-get install -y mariadb-server
 #  ========================
 #
 
-sudo apt-get install -y expect
+# sudo apt-get install -y expect
  
-SECURE_MYSQL=$(expect -c "
+# SECURE_MYSQL=$(expect -c "
 
-set timeout 10
-spawn mysql_secure_installation
+# set timeout 10
+# spawn mysql_secure_installation
 
-expect \"Enter current password for root (enter for none):\"
-send \"$msqlpassroot\r\"
+# expect \"Enter current password for root (enter for none):\"
+# send \"$msqlpassroot\r\"
 
-expect \"Change the root password?\"
-send \"n\r\"
+# expect \"Change the root password?\"
+# send \"n\r\"
 
-expect \"Remove anonymous users?\"
-send \"y\r\"
+# expect \"Remove anonymous users?\"
+# send \"y\r\"
 
-expect \"Disallow root login remotely?\"
-send \"y\r\"
+# expect \"Disallow root login remotely?\"
+# send \"y\r\"
 
-expect \"Remove test database and access to it?\"
-send \"y\r\"
+# expect \"Remove test database and access to it?\"
+# send \"y\r\"
 
-expect \"Reload privilege tables now?\"
-send \"y\r\"
+# expect \"Reload privilege tables now?\"
+# send \"y\r\"
 
-expect eof
-")
+# expect eof
+# ")
  
-echo "$SECURE_MYSQL"
+# echo "$SECURE_MYSQL"
  
-sudo apt-get purge -y expect
+# sudo apt-get purge -y expect
 
 
 #
