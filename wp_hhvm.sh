@@ -8,10 +8,12 @@ url=$(curl http://169.254.169.254/metadata/v1/hostname)
 
 ip_server=$(curl http://169.254.169.254/metadata/v1/interfaces/public/0/ipv4/address)
 
-msqlpassroot=$(</dev/urandom tr -dc A-Za-z0-9| (head -c $1 > /dev/null 2>&1 || head -c 8))
-mysqldb=$(</dev/urandom tr -dc A-Za-z0-9| (head -c $1 > /dev/null 2>&1 || head -c 8))
-mysqluser=$(</dev/urandom tr -dc A-Za-z0-9| (head -c $1 > /dev/null 2>&1 || head -c 8))
-mysqluserpass=$(</dev/urandom tr -dc A-Za-z0-9| (head -c $1 > /dev/null 2>&1 || head -c 8))
+# msqlpassroot=$(</dev/urandom tr -dc a-z0-9| (head -c $1 > /dev/null 2>&1 || head -c 8))
+# 
+msqlpassroot=$(</dev/urandom tr -dc a-z| (head -c $1 > /dev/null 2>&1 || head -c 8))
+mysqldb=$(</dev/urandom tr -dc a-z| (head -c $1 > /dev/null 2>&1 || head -c 8))
+mysqluser=$(</dev/urandom tr -dc a-z| (head -c $1 > /dev/null 2>&1 || head -c 8))
+mysqluserpass=$(</dev/urandom tr -dc a-z| (head -c $1 > /dev/null 2>&1 || head -c 8))
 
 
 # 
@@ -75,15 +77,13 @@ sudo service hhvm restart
 #  ========================
 #
 
-# sudo apt-get install -y software-properties-common
-# sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
-# sudo add-apt-repository 'deb http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.0/ubuntu trusty main'
-# sudo apt-get update
+sudo apt-get install -y software-properties-common
+sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
+sudo add-apt-repository 'deb http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.0/ubuntu trusty main'
+sudo apt-get update
 sudo echo mysql-server mysql-server/root_password password $msqlpassroot | debconf-set-selections
 sudo echo mysql-server mysql-server/root_password_again password $msqlpassroot | debconf-set-selections
-# sudo apt-get install -y mariadb-server
-
-sudo apt-get install -y mysql-server
+sudo apt-get install -y mariadb-server
 
 #
 #  ========================
