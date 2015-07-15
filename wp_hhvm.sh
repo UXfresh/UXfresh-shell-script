@@ -75,13 +75,15 @@ sudo service hhvm restart
 #  ========================
 #
 
-sudo apt-get install -y software-properties-common
-sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
-sudo add-apt-repository 'deb http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.0/ubuntu trusty main'
-sudo apt-get update
+# sudo apt-get install -y software-properties-common
+# sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
+# sudo add-apt-repository 'deb http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.0/ubuntu trusty main'
+# sudo apt-get update
 sudo echo mysql-server mysql-server/root_password password $msqlpassroot | debconf-set-selections
 sudo echo mysql-server mysql-server/root_password_again password $msqlpassroot | debconf-set-selections
-sudo apt-get install -y mariadb-server
+# sudo apt-get install -y mariadb-server
+
+sudo apt-get install mysql-server
 
 #
 #  ========================
