@@ -3,12 +3,12 @@
 # Varibale COnfig
 # 
 
-msqlpassroot=$(</dev/urandom tr -dc A-Za-z0-9| (head -c $1 > /dev/null 2>&1 || head -c 8))
 
 url=$(curl http://169.254.169.254/metadata/v1/hostname)
 
 ip_server=$(curl http://169.254.169.254/metadata/v1/interfaces/public/0/ipv4/address)
 
+msqlpassroot=$(</dev/urandom tr -dc A-Za-z0-9| (head -c $1 > /dev/null 2>&1 || head -c 8))
 mysqldb=$(</dev/urandom tr -dc A-Za-z0-9| (head -c $1 > /dev/null 2>&1 || head -c 8))
 mysqluser=$(</dev/urandom tr -dc A-Za-z0-9| (head -c $1 > /dev/null 2>&1 || head -c 8))
 mysqluserpass=$(</dev/urandom tr -dc A-Za-z0-9| (head -c $1 > /dev/null 2>&1 || head -c 8))
@@ -82,7 +82,6 @@ sudo apt-get update
 sudo echo mysql-server mysql-server/root_password password $msqlpassroot | debconf-set-selections
 sudo echo mysql-server mysql-server/root_password_again password $msqlpassroot | debconf-set-selections
 sudo apt-get install -y mariadb-server
-sudo mysql_install_db
 
 #
 #  ========================
@@ -269,4 +268,10 @@ clear
 echo "******************************************************************************************"
 echo "Qua trinh cai dat hoan thanh"
 echo "Truy cap vao IP hoac Domain de cai dat Wordpress Site va thuc hien cac buoc tiep theo"
+echo "Đây là thông tin Database của bạn (Nhớ sao lưu lại nhé!)"
+echo "MariaDB 'root' user password: $msqlpassroot"
+echo "Database name': $mysqldb"
+echo "Database user': $mysqluser"
+echo "Pasowrd cho Database user': $mysqluserpass"
+echo "=========================================================================================="
 echo "******************************************************************************************"
