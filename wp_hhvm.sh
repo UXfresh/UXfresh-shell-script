@@ -83,7 +83,7 @@ sudo echo mysql-server mysql-server/root_password password $msqlpassroot | debco
 sudo echo mysql-server mysql-server/root_password_again password $msqlpassroot | debconf-set-selections
 # sudo apt-get install -y mariadb-server
 
-sudo apt-get install mysql-server
+sudo apt-get install -y mysql-server
 
 #
 #  ========================
