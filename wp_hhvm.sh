@@ -1,19 +1,42 @@
 #!/bin/bash
 
-# Varibale COnfig
+# Varibale Config
 # 
 
+#
+#  ========================
+#      Domian Name
+#  ========================
+#
+
+domain=$1
+
+#
+#  ========================
+#      Get Hostname
+#  ========================
+#
 
 url=$(curl http://169.254.169.254/metadata/v1/hostname)
 
+#
+#  ========================
+#      Get IP Server
+#  ========================
+#
+
 ip_server=$(curl http://169.254.169.254/metadata/v1/interfaces/public/0/ipv4/address)
 
-# msqlpassroot=$(</dev/urandom tr -dc a-z0-9| (head -c $1 > /dev/null 2>&1 || head -c 8))
-# 
-msqlpassroot=$(</dev/urandom tr -dc a-z| (head -c $1 > /dev/null 2>&1 || head -c 8))
-mysqldb=$(</dev/urandom tr -dc a-z| (head -c $1 > /dev/null 2>&1 || head -c 8))
-mysqluser=$(</dev/urandom tr -dc a-z| (head -c $1 > /dev/null 2>&1 || head -c 8))
-mysqluserpass=$(</dev/urandom tr -dc a-z| (head -c $1 > /dev/null 2>&1 || head -c 8))
+#
+#  ========================
+#      Database Config
+#  ========================
+#
+
+msqlpassroot=$(</dev/urandom tr -dc a-z0-9| (head -c $1 > /dev/null 2>&1 || head -c 9))
+mysqldb=$(</dev/urandom tr -dc a-z0-9| (head -c $1 > /dev/null 2>&1 || head -c 9))
+mysqluser=$(</dev/urandom tr -dc a-z0-9| (head -c $1 > /dev/null 2>&1 || head -c 9))
+mysqluserpass=$(</dev/urandom tr -dc a-z0-9| (head -c $1 > /dev/null 2>&1 || head -c 9))
 
 
 # 
@@ -136,14 +159,30 @@ echo "$wordpress_nginx_config" >> /etc/nginx/sites-available/wordpress
 ln -s /etc/nginx/sites-available/wordpress /etc/nginx/sites-enabled/
 rm /etc/nginx/sites-enabled/default
 
+
+#
+#  ========================
+#       Config Redirect
+#  ========================
+#
+#
+
+if [ "$domain" != "" ]; then
+
+# 
 # Redirect IP to URL:
+# 
+
 sed -i "s/^\# Default server configuration/\# Default server configuration\n\server {\n\tlisten 80;\n\tserver_name $ip_server;\n\treturn 301 \$scheme:\/\/$url\$request_uri;\n\}/" /etc/nginx/sites-available/wordpress
 
-# # Redirect Domain to URL:
-# if [ "$domain" != "$url" ]; then
-#     sed -i "s/^\# Default server configuration/\# Default server configuration\n\server {\n\tlisten 80;\n\tserver_name $domain;\n\treturn 301 \$scheme:\/\/$url\$request_uri;\n\}/" /etc/nginx/sites-available/wordpress
-# fi
+# 
+# Redirect Domain to URL:
+# 
 
+    if [ "$domain" != "$url" ]; then
+        sed -i "s/^\# Default server configuration/\# Default server configuration\n\server {\n\tlisten 80;\n\tserver_name $domain;\n\treturn 301 \$scheme:\/\/$url\$request_uri;\n\}/" /etc/nginx/sites-available/wordpress
+    fi
+fi
 
 #
 #  ========================
