@@ -76,12 +76,19 @@ sudo apt-get update
 sudo apt-get -y install unzip
 
 #Install Nginx
-sudo apt-get -y install nginx
+add-apt-repository -y ppa:nginx/stable
+apt-get update
+apt-get install -y nginx
 
 #Install MySQL
-echo mysql-server mysql-server/root_password password $msqlpassroot | sudo debconf-set-selections
-echo mysql-server mysql-server/root_password_again password $msqlpassroot | sudo debconf-set-selections
-sudo apt-get -y install mysql-server mysql-client
+apt-get install -y software-properties-common
+apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
+add-apt-repository 'deb http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.0/ubuntu trusty main'
+apt-get update
+echo mysql-server mysql-server/root_password password $msqlpassroot | debconf-set-selections
+echo mysql-server mysql-server/root_password_again password $msqlpassroot | debconf-set-selections
+apt-get install -y mariadb-server
+
 
 #Install PHP-FPM & Extentions
 sudo apt-get install -y php5-mysql php5-fpm php5-gd php5-cli php5-curl
@@ -98,7 +105,7 @@ wget -O /etc/nginx/no_cache.conf https://raw.githubusercontent.com/UXfresh/UXfre
 #Creat folder seve Cache, Configuration Nginx & FastCGI
 mkdir /usr/share/nginx/cache
 sed -i "s/^\tworker_connections 768;/\tworker_connections 1536;/" /etc/nginx/nginx.conf
-sed -i "s/^\t#passenger_ruby \/usr\/bin\/ruby;/\t#passenger_ruby \/usr\/bin\/ruby;\n\n\tfastcgi_cache_path \/usr\/share\/nginx\/cache\/fcgi levels=1:2 keys_zone=wordpress:10m max_size=${maxcache}m inactive=1h;/" /etc/nginx/nginx.conf
+sed -i "s/^\tdefault_type application\/octet-stream;/\tdefault_type application\/octet-stream;\n\n\tfastcgi_cache_path \/usr\/share\/nginx\/cache\/fcgi levels=1:2 keys_zone=wordpress:10m max_size=${maxcache}m inactive=1h;/" /etc/nginx/nginx.conf
 sed -i "s/^\tindex index.html index.htm;/\tindex index.php index.html index.htm;/" /etc/nginx/sites-available/default
 sed -i "s/^\tserver_name localhost;/\tserver_name $servername;\n\n\tinclude \/etc\/nginx\/no_cache.conf;/" /etc/nginx/sites-available/default
 sed -i "s/^\tlocation \/ {/\n\tlocation ~ \\\.php$ {\n\t\ttry_files \$uri =404;\n\t\tfastcgi_split_path_info ^(.+\\\.php)(\/.+)\$;\n\t\tfastcgi_cache  wordpress;\n\t\tfastcgi_cache_key \$scheme\$host\$request_uri\$request_method;\n\t\tfastcgi_cache_valid 200 301 302 30s;\n\t\tfastcgi_cache_use_stale updating error timeout invalid_header http_500;\n\t\tfastcgi_pass_header Set-Cookie;\n\t\tfastcgi_pass_header Cookie;\n\t\tfastcgi_ignore_headers Cache-Control Expires Set-Cookie;\n\t\tfastcgi_pass unix:\/var\/run\/php5-fpm.sock;\n\t\tfastcgi_index index.php;\n\t\tfastcgi_cache_bypass \$skip_cache;\n\t\tfastcgi_no_cache \$skip_cache;\n\t\tinclude fastcgi_params;\n\t}\n\tlocation \/ {/" /etc/nginx/sites-available/default
@@ -152,14 +159,13 @@ fi
 
 #Create CSDL website
 mysql -uroot -p$msqlpassroot -e "create database $mysqldb;"
-mysql -uroot -p$msqlpassroot -e "create database $mysqldb;"
 mysql -uroot -p$msqlpassroot -e "create user $mysqluser@localhost;"
 mysql -uroot -p$msqlpassroot -e "SET PASSWORD FOR $mysqluser@localhost= PASSWORD('$mysqluserpass');"
 mysql -uroot -p$msqlpassroot -e "GRANT ALL PRIVILEGES ON $mysqldb.* TO ${mysqluser}@localhost IDENTIFIED BY '$mysqluserpass';"
 mysql -uroot -p$msqlpassroot -e "FLUSH PRIVILEGES;"
 
 #Install Wordpress
-cd /usr/share/nginx/html
+cd /var/www/html
 wget http://wordpress.org/latest.tar.gz
 tar -xvzf latest.tar.gz
 mv wordpress/* ./
