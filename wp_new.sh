@@ -197,7 +197,7 @@ sed -i "s/^\# Default server configuration/\# Default server configuration\n\ser
 # 
 
     if [ "$domain" != "$url" ]; then
-        sed -i "s/^\# Default server configuration/\# Default server configuration\n\server {\n\tlisten 80;\n\tserver_name $domain;\n\treturn 301 \$scheme:\/\/$url\$request_uri;\n\}/" /etc/nginx/sites-available/wordpress
+        sed -i "s/^\# Default server configuration/\n\server {\n\tlisten 80;\n\tserver_name $domain;\n\treturn 301 \$scheme:\/\/$url\$request_uri;\n\}/" /etc/nginx/sites-available/wordpress
     fi
 fi
 
